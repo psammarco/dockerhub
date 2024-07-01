@@ -1,0 +1,32 @@
+// Server-Side Authentication: 
+
+This setup uses one-way TLS where the client verifies the server's certificate against the CA certificate. This eliminates the complexity of having to generate and maintain a certificate for each client.
+
+a. Generate the CA Private Key:
+openssl genpkey -algorithm RSA -out ca-key.pem -pkeyopt rsa_keygen_bits:4096
+
+b. Create the CA Certificate:
+openssl req -x509 -new -nodes -key ca-key.pem -sha256 -days 3650 -out ca-cert.pem -subj "/CN=My Rsyslog CA"
+
+c. Generate the Server Private Key:
+openssl genpkey -algorithm RSA -out server-key.pem -pkeyopt rsa_keygen_bits:4096
+
+d. Create a Certificate Signing Request (CSR) for the Server:
+openssl req -new -key server-key.pem -out server.csr -subj "/CN=rsyslog-server"
+
+e. Create the Server Certificate:
+   - First, create a configuration file (server_cert.conf) to specify the certificate extensions:
+
+[ v3_req ]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = rsyslogsrv1
+DNS.2 = rsyslogsrv2
+
+   - Then, sign the server certificate with the CA certificate:
+openssl x509 -req -in server.csr -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -days 365 -sha256 -extfile server_cert.conf -extensions v3_req
+
+NOTE: Skip step a and b if you already have a CA.

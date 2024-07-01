@@ -1,0 +1,26 @@
+version: '3.9'
+
+volumes:
+  certs: {}
+
+networks:
+  default:
+    external:
+      name: rsyslogd
+
+
+services: 
+ rsyslogclt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rsyslog:client # adds tagging
+    container_name: rsyslogclt
+    hostname: rsyslogclt
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+      - RSYSLOGSRV_CENTRAL="172.22.0.2"
+      - RSYSLOGSRV_SECONDARY="172.22.0.3"
+    volumes:
+      - ./PATH_TO_CA_CERT:/rsyslog-certs:ro

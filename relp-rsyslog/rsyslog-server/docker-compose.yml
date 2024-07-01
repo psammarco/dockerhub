@@ -1,0 +1,46 @@
+version: '3.9'
+
+volumes:
+  certs: {}
+
+networks:
+  rsyslogd:
+    name: rsyslogd
+
+services: 
+ rsyslogsrv1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rsyslog:server # adds tagging
+    container_name: rsyslogsrv1
+    hostname: rsyslogsrv1
+    restart: unless-stopped
+    networks:
+      rsyslogd:
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - ./PATH_TO_KEYS:/rsyslog-certs:ro
+      - ./rsyslog.conf:/etc/rsyslog.conf:ro
+    expose:
+      - "22514"
+
+ rsyslogsrv2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rsyslog:server # adds tagging
+    container_name: rsyslogsrv2
+    hostname: rsyslogsrv2
+    restart: unless-stopped
+    networks:
+      rsyslogd:
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - ./PATH_TO_KEYS:/rsyslog-certs:ro
+      - ./rsyslog.conf:/etc/rsyslog.conf:ro
+    expose:
+      - "22514"
+
