@@ -1,6 +1,6 @@
 # RELP rsyslog server with One Way TLS Authentication
 
-### Intro
+## Quick intro
 This is a two nodes relp-rsyslog server which uses relp-openssl for One Way TLS authentication.
 
 By using server-side authentication or one-way SSL/TLS authentication, only the server presents its certificate to the client. The client verifies the server's certificate using the CA certificate but does not provide its own certificate for verification.
