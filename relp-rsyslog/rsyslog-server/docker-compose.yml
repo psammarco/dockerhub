@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: rsyslog:server # adds tagging
+    image: relp-rsyslog:server # adds tagging
     container_name: rsyslogsrv1
     hostname: rsyslogsrv1
     restart: unless-stopped
@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: rsyslog:server # adds tagging
+    image: relp-rsyslog:server
     container_name: rsyslogsrv2
     hostname: rsyslogsrv2
     restart: unless-stopped
