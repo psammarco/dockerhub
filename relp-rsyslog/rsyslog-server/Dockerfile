@@ -20,4 +20,4 @@ RUN apt-get clean \
 # Expose RELP port
 EXPOSE 22514/tcp
 
-CMD ["/usr/sbin/rsyslogd", "-n", "-f", "/etc/rsyslog.conf"]
+CMD ["/usr/sbin/rsyslogd", "-n", "-f", "/etc/rsyslog/rsyslog.conf"]
