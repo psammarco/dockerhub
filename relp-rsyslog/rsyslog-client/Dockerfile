@@ -12,7 +12,7 @@ RUN apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 # Copy rsyslog.conf to image
-COPY rsyslog.conf /etc/rsyslog.conf
+COPY rsyslog.conf /etc/rsyslog/rsyslog.conf
 
 # Copy entrypoint script
 COPY entrypoint.sh /usr/local/bin
