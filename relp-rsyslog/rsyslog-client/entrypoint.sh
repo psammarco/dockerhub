@@ -22,5 +22,8 @@ echo "*.* action(type=\"omrelp\" target=${RSYSLOGSRV_SECONDARY} port=\"22514\" \
 
 echo "*.* action(type=\"omfile\" file=\"/var/log/localbuffer\" action.execOnlyWhenPreviousIsSuspended=\"on\")" >> $rsyslogconf
 
+# Slowing down the start to allow the container to load up properly in kubernetes
+sleep 10
+
 # Start rsyslog service
 exec rsyslogd -n -f $rsyslogconf
