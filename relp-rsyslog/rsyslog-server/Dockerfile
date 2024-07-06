@@ -2,8 +2,8 @@ FROM debian:stable-slim
 ENV DEBIAN_FRONTEND=noninteractivie
 
 # Installing PREREQs
-RUN apt update && apt install --no-install-suggests -y \
-rsync \
+RUN apt update && apt upgrade -y
+RUN apt install --no-install-suggests -y \
 rsyslog-relp \
 rsyslog-kafka \
 rsyslog-gssapi \
