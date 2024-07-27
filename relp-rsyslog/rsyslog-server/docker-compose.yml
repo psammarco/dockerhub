@@ -22,7 +22,7 @@ services:
       - TZ=Europe/London
     volumes:
       - ./PATH_TO_KEYS:/rsyslog-certs:ro
-      - ./rsyslog.conf:/etc/rsyslog.conf:ro
+      - ./rsyslog.conf:/etc/rsyslog/rsyslog.conf:ro
     expose:
       - "22514"
 

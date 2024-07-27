@@ -15,7 +15,8 @@ rsyslog-elasticsearch
 
 # Cleaning up apt stuff..
 RUN apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* && \
+ rm /etc/rsyslog.conf
 
 # Expose RELP port
 EXPOSE 22514/tcp
