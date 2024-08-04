@@ -4,55 +4,21 @@
 RSYSLOGSRV_CENTRAL="${RSYSLOGSRV_CENTRAL:-127.0.0.1}"
 RSYSLOGSRV_SECONDARY="${RSYSLOGSRV_SECONDARY:-127.0.0.1}"
 
-# rsyslog.conf variable PATH
-rsyslogconf=/etc/rsyslog/rsyslog.conf
 
 # Rsyslog forward config
-{
-    echo "*.* action("
-    echo "    type=\"omrelp\""
-    echo "    target=\"${RSYSLOGSRV_CENTRAL}\""
-    echo "    port=\"22514\""
-    echo "    tls=\"on\""
-    echo "    tls.caCert=\"/rsyslog-certs/ca-cert.pem\""
-    echo "    tls.myCert=\"/rsyslog-certs/client-cert.pem\""
-    echo "    tls.myPrivKey=\"/rsyslog-certs/client-key.pem\""
-    echo "    tls.tlscfgcmd=\"CipherString=ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384 MinProtocol=TLSv1.2 MaxProtocol=TLSv1.3\""
-    echo ")"
-} >> "$rsyslogconf"
+echo "*.* action(type=\"omrelp\" target=${RSYSLOGSRV_CENTRAL} port=\"22514\" \
+    tls=\"on\" \
+    tls.caCert=\"/rsyslog-certs/ca-cert.pem\" \
+    tls.tlscfgcmd=\"CipherString=ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384 MinProtocol=TLSv1.2 MaxProtocol=TLSv1.3\")" >> /etc/rsyslog.conf
 
-{
-    echo "*.* action("
-    echo "    type=\"omrelp\""
-    echo "    target=\"${RSYSLOGSRV_SECONDARY}\""
-    echo "    port=\"22514\""
-    echo "    tls=\"on\""
-    echo "    tls.caCert=\"/rsyslog-certs/ca-cert.pem\""
-    echo "    tls.myCert=\"/rsyslog-certs/client-cert.pem\""
-    echo "    tls.myPrivKey=\"/rsyslog-certs/client-key.pem\""
-    echo "    tls.tlscfgcmd=\"CipherString=ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384 MinProtocol=TLSv1.2 MaxProtocol=TLSv1.3\""
-    echo "    action.execOnlyWhenPreviousIsSuspended=\"on\""
-    echo ")"
-} >> "$rsyslogconf"
+# Append configuration for secondary server to rsyslog.conf
+echo "*.* action(type=\"omrelp\" target=${RSYSLOGSRV_SECONDARY} port=\"22514\" \
+    tls=\"on\" \
+    tls.caCert=\"/rsyslog-certs/ca-cert.pem\" \
+    tls.tlscfgcmd=\"CipherString=ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384 MinProtocol=TLSv1.2 MaxProtocol=TLSv1.3\" \
+    action.execOnlyWhenPreviousIsSuspended=\"on\")" >> /etc/rsyslog.conf
 
-{
-    echo "*.* action("
-    echo "    type=\"omfile\""
-    echo "    file=\"/var/log/localbuffer\""
-    echo "    action.execOnlyWhenPreviousIsSuspended=\"on\""
-    echo ")"
-} >> "$rsyslogconf"
-
-{
-    echo "*.* action("
-    echo "    type=\"omfile\""
-    echo "    file=\"/var/log/localbuffer\""
-    echo "    action.execOnlyWhenPreviousIsSuspended=\"on\""
-    echo ")"
-} >> "$rsyslogconf"
-
-# Slowing down the start to allow the container to load up properly in kubernetes
-sleep 10
+echo "*.* action(type=\"omfile\" file=\"/var/log/localbuffer\" action.execOnlyWhenPreviousIsSuspended=\"on\")" >> /etc/rsyslog.conf
 
 # Start rsyslog service
-exec rsyslogd -n -f $rsyslogconf
+exec rsyslogd -n

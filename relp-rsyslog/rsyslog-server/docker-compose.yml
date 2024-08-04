@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: relp-rsyslog:server # adds tagging
+    image: rsyslog:server # adds tagging
     container_name: rsyslogsrv1
     hostname: rsyslogsrv1
     restart: unless-stopped
@@ -21,8 +21,8 @@ services:
     environment:
       - TZ=Europe/London
     volumes:
-      - ./PATH_TO_KEYS:/rsyslog-certs:ro
-      - ./rsyslog.conf:/etc/rsyslog/rsyslog.conf:ro
+      - ./keys:/rsyslog-certs:ro
+      - ./rsyslog.conf:/etc/rsyslog.conf:ro
     expose:
       - "22514"
 
@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: relp-rsyslog:server
+    image: rsyslog:server # adds tagging
     container_name: rsyslogsrv2
     hostname: rsyslogsrv2
     restart: unless-stopped
@@ -39,8 +39,8 @@ services:
     environment:
       - TZ=Europe/London
     volumes:
-      - ./PATH_TO_KEYS:/rsyslog-certs:ro
-      - ./rsyslog.conf:/etc/rsyslog/rsyslog.conf:ro
+      - ./keys:/rsyslog-certs:ro
+      - ./rsyslog.conf:/etc/rsyslog.conf:ro
     expose:
       - "22514"
 
