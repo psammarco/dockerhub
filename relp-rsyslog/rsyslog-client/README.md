@@ -16,8 +16,5 @@ tls.tlscfgcmd="CipherString=ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-S
 ```
 Lastly, when either one or both rsyslog server is down, the client will log unsuccessful requests to */var/log/localbuffer*.
 
-## Dropping privileges in rsyslo
-In both the client and server configurations, rsyslogd initially starts as the ***root*** user but then drops privileges to run as a non-privileged user. This means that the only process running does so as the ***rsyslog*** user. However, the container itself still operates with root privileges, so if you execute a command within the container, it will be run as root. I am currently working on finding a solution to start rsyslogd *(with this very same configuration)* without requiring root privileges altogether. If and when that is achieved, the container itself will be able to run as a non-privileged user.
-
 ## Quick test
 logger "whatever message"
