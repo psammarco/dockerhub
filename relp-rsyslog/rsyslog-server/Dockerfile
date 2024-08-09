@@ -12,14 +12,16 @@ RUN apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 # Create unprivileged user
-RUN groupadd rsyslogd && \
-    useradd -r -m -s /bin/bash -g rsyslogd rsyslog && \
-    chown -R rsyslog:rsyslogd /home/rsyslog 
-
-# Sorting permissions to log dir
-RUN chown -R rsyslog:rsyslogd /var/log
+RUN groupadd -g 1000 rsyslogd && \
+    useradd -r -m -u 1000 -s /bin/bash -g rsyslogd rsyslog && \
+    chown -R rsyslog:rsyslogd /home/rsyslog
 
 # Expose RELP port
 EXPOSE 22514/tcp
 
-CMD ["/usr/sbin/rsyslogd", "-n", "-f", "/etc/rsyslog.conf"]
+# Entrypoint copy and permissions
+COPY entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
